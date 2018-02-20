@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Book;
+use app\Requests\StoreBook;
 
 class BookController extends Controller
 {
@@ -33,9 +34,16 @@ class BookController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreBook $request)
     {
-        //
+        $book = new Book;
+        $book->title = request('title');
+        $book->author = request('author');
+        $book->publish_year = request('publish_year');
+        $book->language = request('language');
+        $book->original_language = request('original_language');
+        $book->user_id = auth()->user()->id;
+        $book->save();
     }
 
     /**
@@ -67,9 +75,11 @@ class BookController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreBook $request, $id)
     {
-        //
+        $book = Book::findOrFail($id);
+        $book->update($request->all());
+        return $book;
     }
 
     /**
@@ -80,6 +90,8 @@ class BookController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $book = Book::findOrFail($id);
+        $book->delete();
+        return $book;
     }
 }
