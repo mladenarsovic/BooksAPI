@@ -49,6 +49,10 @@ class LoginController extends Controller
         } catch(Exeption $e) {
             return response()->json(['token' => $token], 500);
         }
-        return response()->json(['token' => $token]);
+
+        \JWTAuth::setToken($token);
+        $user = \JWTAuth::toUser($token);
+
+        return response()->json(['token' => $token, 'user' => $user]);
     }
 }

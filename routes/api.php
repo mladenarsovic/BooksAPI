@@ -17,5 +17,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::get('books', 'BookController@index');
+Route::get('search/{title}', 'BookController@searchByTitle'); // Search by title endpoint
+Route::get('search/{year}', 'BookController@searchByYear'); // Search by year endpoint
+
+Route::post('register', 'UsersController@store');
 Route::post('login', 'Auth\LoginController@authenticate');
-Route::post('register', 'Auth\RegisterController@create');

@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Book;
-use app\Requests\StoreBook;
+use App\User;
 
-class BookController extends Controller
+class UsersController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +14,7 @@ class BookController extends Controller
      */
     public function index()
     {
-        return Book::paginate(10);
+        //
     }
 
     /**
@@ -34,18 +33,21 @@ class BookController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreBook $request)
-    {
-        $book = new Book;
-        $book->title = request()->input('title');
-        $book->author = request()->input('author');
-        $book->publish_year = request()->input('publish_year');
-        $book->language = request()->input('language');
-        $book->original_language = request()->input('original_language');
-        $book->user_id = auth()->user()->id;
-        $book->save();
+    public function store(Request $request)
+    {   
+        $this->validate(request(), [
+            'name' => 'required',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|min:6'
+        ]);
 
-        return $book;
+        $user = new User;
+        $user->name = request('name');
+        $user->email = request('email');
+        $user->password = bcrypt(request('password'));
+        $user->save();
+
+        return $user;
     }
 
     /**
@@ -77,12 +79,9 @@ class BookController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreBook $request, $id)
+    public function update(Request $request, $id)
     {
-        $book = Book::findOrFail($id);
-        $book->update($request->all());
-
-        return $book;
+        //
     }
 
     /**
@@ -93,21 +92,6 @@ class BookController extends Controller
      */
     public function destroy($id)
     {
-        $book = Book::findOrFail($id);
-        $book->delete();
-
-        return $book;
-    }
-
-    // Bonus task - Search Books by title and year
-    
-    public function searchByTitle($title) 
-    {
-        return Book::where('title', 'like', '%' . $title . '%')->paginate(10);
-    }
-
-    public function searchByYear($year)
-    {
-        return Book::where('year', 'like', '%' . $year . '%')->paginate(10);
+        //
     }
 }
