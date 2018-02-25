@@ -19,17 +19,12 @@ class User extends Authenticatable implements JWTSubject
         'name', 'email', 'password',
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password', 'remember_token',
-    ];
-
-    public function getJWTIdentifier()
-    {
+   /**
+    * Get the identifier that will be stored in the subject claim of the JWT.
+    *
+    * @return mixed
+    */
+    public function getJWTIdentifier(){
         return $this->getKey();
     }
     /**
@@ -37,10 +32,10 @@ class User extends Authenticatable implements JWTSubject
      *
      * @return array
      */
-    public function getJWTCustomClaims()
-    {
+    public function getJWTCustomClaims(){
         return [];
     }
+
 
     public function books()
     {

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Book;
-use app\Requests\StoreBook;
+use App\Http\Requests\StoreBook;
 
 class BookController extends Controller
 {
@@ -34,14 +34,14 @@ class BookController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreBook $request)
+    public function store(Request $request)
     {
         $book = new Book;
-        $book->title = request()->input('title');
-        $book->author = request()->input('author');
-        $book->publish_year = request()->input('publish_year');
-        $book->language = request()->input('language');
-        $book->original_language = request()->input('original_language');
+        $book->title = request('title');
+        $book->author = request('author');
+        $book->publish_year = request('publish_year');
+        $book->language = request('language');
+        $book->original_language = request('original_language');
         $book->user_id = auth()->user()->id;
         $book->save();
 
@@ -77,7 +77,7 @@ class BookController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreBook $request, $id)
+    public function update(Request $request, $id)
     {
         $book = Book::findOrFail($id);
         $book->update($request->all());
@@ -108,6 +108,6 @@ class BookController extends Controller
 
     public function searchByYear($year)
     {
-        return Book::where('year', 'like', '%' . $year . '%')->paginate(10);
+        return Book::where('publish_year', 'like', $year)->paginate(10);
     }
 }

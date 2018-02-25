@@ -26,7 +26,9 @@ class StoreBook extends FormRequest
         return [
             'title' => 'required|unique:books|max:255',
             'author' => 'required',
-            'publish_year' => 'required'
+            'publish_year' => 'required',
+            'language' => 'required',
+            'original_language' => 'required'
         ];
     }
 }
